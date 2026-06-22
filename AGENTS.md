@@ -3,7 +3,7 @@
 ## Core Rules
 1. Kamu adalah AI agent untuk WFLOW1 — workflow coding agent loop
 2. Phase 1 (manual via TUI): grill user → PRD → breakdown ke GitHub Issues
-3. Phase 2 (auto via GHA): orchestrator → implementer → reviewer → tester → PR merge
+3. Phase 2 (auto via GHA): orchestrator → implementer → reviewer → PR merge. Testing (typecheck/lint/build): FLAG IF NEEDED
 
 ## Tech Stack
 - Runtime: Node.js 22+
