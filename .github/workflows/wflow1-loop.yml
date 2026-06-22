@@ -1,0 +1,60 @@
+name: WFLOW1 — Loop Cycle
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: "Issue number to implement"
+        required: false
+
+jobs:
+  wflow1-loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install OpenCode (pinned)
+        run: npm install -g opencode-ai@1.15.4
+
+      - name: Read State
+        run: |
+          if (Test-Path -LiteralPath "memory/STATE.md") {
+            Get-Content -LiteralPath "memory/STATE.md"
+          }
+        shell: pwsh
+
+      - name: Run Loop Cycle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          opencode run -m opencode/deepseek-v4-flash-free `
+            --dangerously-skip-permissions `
+            --agent orchestrator `
+            "Jalankan WFLOW1 loop cycle:
+             1. Baca memory/STATE.md dan memory/TASKS.json
+             2. Cari issue dengan label 'ready-for-agent' di GitHub Issues
+             3. Ambil satu issue PRIORITAS TERTINGGI
+             4. Delegasikan ke @implementer untuk coding + commit ke feat/issue-N
+             5. Delegasikan ke @reviewer untuk review
+             6. Jika reject: balik ke step 4 (max 3 iterasi)
+             7. Jika approve: buat PR dengan 'Closes #[issue]'
+             8. Update memory/STATE.md dan memory/TASKS.json
+             9. Output hasil siklus
+
+             Testing (typecheck, lint, build): FLAG IF NEEDED"
+        shell: pwsh

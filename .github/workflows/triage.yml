@@ -1,0 +1,37 @@
+name: Triage Issue
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install OpenCode (pinned)
+        run: npm install -g opencode-ai@1.15.4
+
+      - name: Triage Issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          opencode run -m opencode/deepseek-v4-flash-free `
+            --dangerously-skip-permissions `
+            "Issue baru: ${{ github.event.issue.title }}
+             Body: ${{ github.event.issue.body }}
+             Tugas:
+             1. Klasifikasi: 'bug', 'feature', 'question', atau 'documentation'?
+             2. Beri label sesuai via `gh issue edit`
+             3. Kalau bisa dikerjakan agent -> tambah label 'ready-for-agent'
+             4. Balas komentar analisis singkat"
+        shell: pwsh
