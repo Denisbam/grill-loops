@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/deepseek-v4-flash-free",
+  "autoCompact": true,
+  "maxTokens": 32000,
+  "provider": {
+    "opencode": {
+      "models": {
+        "deepseek-v4-flash-free": {
+          "limit": { "context": 850000, "output": 384000 }
+        }
+      }
+    }
+  },
+  "agents": {
+    "build": {
+      "model": "opencode/deepseek-v4-flash-free"
+    }
+  },
+  "instructions": [
+    "AGENTS.md"
+  ],
+  "compaction": {
+    "auto": true,
+    "reserved": 10000
+  }
+}
