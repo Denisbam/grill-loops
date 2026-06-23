@@ -1,8 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "model": "opencode/deepseek-v4-flash-free",
-  "autoCompact": true,
-  "maxTokens": 32000,
   "provider": {
     "opencode": {
       "models": {
@@ -12,7 +10,7 @@
       }
     }
   },
-  "agents": {
+  "agent": {
     "build": {
       "model": "opencode/deepseek-v4-flash-free"
     }
